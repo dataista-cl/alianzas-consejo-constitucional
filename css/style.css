@@ -63,7 +63,8 @@ input {
 }
 
 #viz {
-  margin: 0;
+  display: block;
+  text-align: center;
 }
 
 circle {

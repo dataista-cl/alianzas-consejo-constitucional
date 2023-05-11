@@ -81,10 +81,23 @@ Promise.all([
     .join("g")
     .attr("transform", (d) => `translate(${gScale(d.data.name)},${stdY})`);
 
+  const outerNodes = node
+    .selectAll(".outer-circle")
+    .data((d) => [d])
+    .join("circle")
+    .attr("class", "outer-circle")
+    .attr("r", (d) => rScale(d.r))
+    .attr("fill", (d) => "none")
+    .attr("stroke", d => "#BBB")
+    .attr("stroke-width", 1.5)
+    .attr("cx", 0)
+    .attr("cy", 0);
+
   const innerNodes = node
-    .selectAll("circle")
+    .selectAll(".inner-circle")
     .data((d) => d.children)
     .join("circle")
+    .attr("class", "inner-circle")
     .attr("r", (d) => rScale(d.r))
     .attr("fill", (d) => "steelblue")
     .attr("cx", (d) => rScale(d.x - d.parent.x))
