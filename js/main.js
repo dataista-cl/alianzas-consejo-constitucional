@@ -1,0 +1,104 @@
+Promise.all([
+  d3.csv("data/votos.csv"),
+  d3.csv("data/cupos.csv"),
+  d3.json("data/alianzas.json")
+]).then(function(data){
+
+  const votos = data[0],
+    cupos = data[1],
+    alianzas = data[2];
+
+  votos.forEach(d => {
+    d.partido = d.partido.trim();
+    d.votos = +d.votos;
+  })
+
+  console.log(votos, cupos, alianzas);
+
+  const circlesData = {
+    "name": "All",
+    "children": alianzas.map(alianza => {
+        return {
+          "name": alianza.nombre,
+          "children": alianza.partidos.map(partido => {
+            return {
+              "name": partido,
+              "value": votos.filter(voto => voto.partido === partido).reduce((a,b) => a + b.votos, 0)
+            }
+          })
+        }
+    })
+  };
+
+  console.log(circlesData);
+
+  const width = 800,
+    height = 250;
+  
+  const margin = {"bottom": 20};
+
+  const widthPadding = 50;
+
+  const pack = data =>
+    d3.pack()
+      .size([width - 2, height - 2])
+      .padding(3)(
+        d3
+          .hierarchy(data)
+          .sum(d => d.value)
+          // .sort((a, b) => b.value - a.value)
+      );
+
+  const root = pack(circlesData);
+
+  const mainnodes = root.descendants().filter((d) => d.height == 1);
+
+  const widthBand = d3.sum(mainnodes, (d) => d.r * 2 + widthPadding);
+
+  const stdY = height / 2;
+
+  const rScale = d3.scaleLinear().domain([0, widthBand]).range([0, width]);
+
+  const gScale = d3
+    .scalePoint()
+    .padding(0.5)
+    .domain(d3.map(mainnodes, (d) => d.data.name))
+    .range([0, width]);
+
+  const svg = d3.select("#viz")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("viewBox", [0, 0, width, height])
+    .style("font", "10px sans-serif")
+    .attr("text-anchor", "middle");
+
+  console.log(root.descendants())
+
+  const node = svg
+    .selectAll("g")
+    .data(root.descendants().filter((d) => d.height == 1))
+    .join("g")
+    .attr("transform", (d) => `translate(${gScale(d.data.name)},${stdY})`);
+
+  const innerNodes = node
+    .selectAll("circle")
+    .data((d) => d.children)
+    .join("circle")
+    .attr("r", (d) => rScale(d.r))
+    .attr("fill", (d) => "steelblue")
+    .attr("cx", (d) => rScale(d.x - d.parent.x))
+    .attr("cy", (d) => rScale(d.y - d.parent.y));
+
+  const gAxis = svg
+    .append("g")
+    .call(d3.axisBottom(gScale))
+    .call((g) => {
+      g.select(".domain").remove();
+      g.selectAll(".tick line").remove();
+    });
+
+  gAxis.attr("transform", `translate(0, ${height - margin.bottom})`);
+
+  return svg.node();
+})

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-169653364-5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-169653364-5');
+  </script>
+
+  <title>Reformas constitucionales</title>
+  <meta charset="utf-8">
+  <meta name="keywords" content="d3.js, visualization, interactive, politics, constitution, Chile">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="author" content="Fernando Becerra">
+	<meta name="description" content="Visualización interactiva de proyectos de ley que han sido ingresados como reformas constitucionales para modificar la Constitución Política de la República de Chile de 1980.">
+
+	<meta property="og:url" content="http://www.fernandobecerra.com/reformas">
+	<meta property="og:title" content="Reformas constitucionales">
+	<meta property="og:description" content="Visualización interactiva de proyectos de ley que han sido ingresados como reformas constitucionales para modificar la Constitución Política de la República de Chile de 1980.">
+	<meta property="og:image" content="http://www.fernandobecerra.com/reformas/img/social.png">
+	<meta property="og:site_name" content="Fernando Becerra">
+
+	<meta property="twitter:creator" content="@fdo_becerra">
+	<meta property="twitter:title" content="Reformas constitucionales">
+	<meta property="twitter:description" content="Visualización interactiva de proyectos de ley que han sido ingresados como reformas constitucionales para modificar la Constitución Política de la República de Chile de 1980.">
+	<meta property="twitter:card" content="summary_large_image">
+	<meta property="twitter:image" content="http://www.fernandobecerra.com/reformas/img/social.png">
+	<meta property="twitter:site" content="@fdo_becerra">
+
+  <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@500&family=Open+Sans:wght@300&family=Lato:wght@300;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-xs-12 col-sm-8 title">
+        <h2>Proyectos de reforma a la Constitución de Chile</h2>
+    </div>
+    <div class="col-sm-2">
+    </div>
+  </div>
+  <div class="row content">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-xs-12 col-sm-8 main-text">
+      <p>
+        El 25 de octubre se llevará a cabo el plebiscito nacional para decidir si queremos escrbir una nueva constitución y bajo qué mecanismo.
+        En este contexto ha surgido la discusión de qué tanto se ha modificado la actual constitución, pues los procedimientos para hacerlo existen y están especifidados en la misma carta magna.
+        Para ello, el Presidente, la Presidenta o cualquier parlamentario o parlamentaria puede presentar un proyecto de reforma, el cual debe ser aprobado por ambas cámaras.
+        En general se necesita de al menos tres quintas partes de los diputados y diputadas, y de senadores y senadoras para aprobarlos, aunque algunos capítulos de la constitución exigen un quórum más alto de dos tercios.
+        Dado eso, ¿cuántas veces se ha hecho uso de este procedimiento?
+      </p>
+    </div>
+    <div class="col-sm-2">
+    </div>
+  </div>
+  <div class="row" id="viz">
+  </div>
+  <div class="row footer">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-6 col-xs-12 notes">
+      <p>
+        <h6>Fuentes</h6>
+        El texto está basado en <a href="https://www.elmostrador.cl/noticias/opinion/2011/07/28/como-cambiar-la-constitucion/" target="_blank">este artículo</a> escrito por Fernando Muñoz
+        y en la página de Wikipedia de la <a href="https://es.wikipedia.org/wiki/Constitución_Política_de_la_República_de_Chile_de_1980" target="_blank">Constitución Política de Chile</a>.
+        </br>
+        La información y los detalles de cada proyecto de ley fueron recogidos de la página de la
+        <a href="https://www.bcn.cl/historiadelaley/nc/historia-de-la-ley/modificaciones/2422/aHR0cHM6Ly93d3cuYmNuLmNsL2hpc3RvcmlhZGVsYWxleS9uYy9saXN0YS1kZS1yZXN1bHRhZG8tZGUtYnVzcXVlZGEvY29uc3RpdHVjaW9uLyNwYWdpbmEtMQ%3D%3D/2/50/10/10/" target="_blank">Biblioteca del Congreso Nacional</a>,
+        la página del <a href="https://www.senado.cl/appsenado/templates/tramitacion/index.php" target="_blank">Senado de la República</a>
+        y la <a href="http://opendata.congreso.cl" target="_blank">API del Congreso</a>.
+      </p>
+      <p>
+        <h6>Métodos</h6>
+        El <a href="https://github.com/fbecerra/reformas/blob/master/data/grid.xlsx" target="_blank">listado</a> de proyectos de ley ingresados como reformas constitucionales se obtuvo desde la búsqueda avanzada de la página del Senado.
+        Luego se usó el número de boletín de cada proyecto para acceder al detalle a través de la API del Congreso.
+        Los datos finales se encuentran en <a href="https://github.com/fbecerra/reformas/blob/master/data/reformas.json" target="_blank">este archivo</a> que fue generado luego de corregir inconsistencias en los nombres de lso congresistas.
+        Para más detalle se puede ver el <a href="https://github.com/fbecerra/reformas/blob/master/python/reformas_constitucionales.ipynb">jupyter notebook</a> utilizado para procesar los datos.
+      </p>
+      <p>
+        <h6>Autor</h6>
+        Fernando Becerra es un científico de datos que se dedica al análisis y visualización de datos.
+        Lo puedes contacter en su <a href="http://fernandobecerra.com" target="_blank">página web</a>,
+        su <a href="https://twitter.com/fdo_becerra" target="_blank">cuenta de Twitter</a>
+        o directamente a su <a href="mailto:becerrafernando@gmail.com">dirección de correo</a>.
+      </p>
+
+    </div>
+    <div class="col-sm-3">
+    </div>
+  </div>
+  <script src="js/d3.v7.min.js"></script>
+  <script src="js/main.js"></script>
+<body>
+</body>
+</html>
