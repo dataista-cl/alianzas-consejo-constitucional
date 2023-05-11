@@ -32,12 +32,12 @@ Promise.all([
 
   console.log(circlesData);
 
-  const width = 800,
-    height = 250;
+  const width = 1000,
+    height = 300;
   
-  const margin = {"bottom": 20};
+  const margin = {"top": 20};
 
-  const widthPadding = 50;
+  const widthPadding = 40;
 
   const pack = data =>
     d3.pack()
@@ -46,7 +46,6 @@ Promise.all([
         d3
           .hierarchy(data)
           .sum(d => d.value)
-          // .sort((a, b) => b.value - a.value)
       );
 
   const root = pack(circlesData);
@@ -73,11 +72,13 @@ Promise.all([
     .style("font", "10px sans-serif")
     .attr("text-anchor", "middle");
 
-  console.log(root.descendants())
+  const alianzasCircles = root.descendants().filter((d) => d.height == 1);
+
+  const maxRadius = d3.max(alianzasCircles, d => d.r);
 
   const node = svg
     .selectAll("g")
-    .data(root.descendants().filter((d) => d.height == 1))
+    .data(alianzasCircles)
     .join("g")
     .attr("transform", (d) => `translate(${gScale(d.data.name)},${stdY})`);
 
@@ -105,13 +106,13 @@ Promise.all([
 
   const gAxis = svg
     .append("g")
-    .call(d3.axisBottom(gScale))
+    .call(d3.axisTop(gScale))
     .call((g) => {
       g.select(".domain").remove();
       g.selectAll(".tick line").remove();
     });
 
-  gAxis.attr("transform", `translate(0, ${height - margin.bottom})`);
+  gAxis.attr("transform", `translate(0, ${height / 2 - rScale(maxRadius) - 10})`);
 
   return svg.node();
 })
