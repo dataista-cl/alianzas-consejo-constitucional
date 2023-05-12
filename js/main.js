@@ -117,7 +117,7 @@ Promise.all([
     const gScale = d3
       .scalePoint()
       .padding(0.5)
-      .domain(d3.map(alianzasData, (d) => d.nombre))
+      .domain(d3.map(alianzasData.filter(alianza => alianza.partidos.length > 0), (d) => d.nombre))
       .range([0, width]);
 
     const root = pack(circlesData);
