@@ -8,6 +8,8 @@ Promise.all([
     cupos = data[1],
     alianzas = data[2];
 
+  let overCircle;
+
   votos.forEach(d => {
     d.partido = d.partido.trim();
     d.votos = +d.votos;
@@ -76,6 +78,68 @@ Promise.all([
 
   const maxRadius = d3.max(alianzasCircles, d => d.r);
 
+  const drag = d3.drag()
+    .on("start", startDragging)
+    .on("drag", dragCircle)
+    .on("end", endDragging);
+
+  function dragCircle(event, d) {
+    const [x, y] = d3.pointer(event, svg.node());
+    // console.log(x,y);
+    d3.select(this)
+      .attr("transform", `translate(${x - gScale(d.parent.data.name)},${y - stdY})`);
+    overCircle = overDragCircles(x, y);
+    if (overCircle !== null) {
+      outerNodes.filter(d => d.data.name === overCircle.data.name).attr("stroke", "black");
+    } else {
+      outerNodes.attr("stroke", "#BBB");
+    }
+  }
+  
+  function overDragCircles(x, y) {
+    let thisCircle = null;
+    alianzasCircles.forEach(circle => {
+      if (Math.pow(x - gScale(circle.data.name), 2) + Math.pow(y - stdY, 2) <= Math.pow(rScale(circle.r), 2)) {
+        thisCircle = circle;
+      }
+    });
+    return thisCircle;
+  }
+  
+  function startDragging(event) {
+    const isDragging = true;
+    d3.select(this)
+      // .classed("dragging", isDragging)
+      .raise(); // SVG elements don't have a z-index so bring the circle to the top
+  }
+  
+  function endDragging(event) {
+    console.log(overCircle);
+    if (overCircle === null) {
+      d3.select(this)
+        .transition(100)
+        .attr("transform", `translate(0,0)`);
+    }
+    // const isDragging = false
+    // const circle = d3.select(this)
+    //   .classed("dragging", isDragging);
+    // updateRect(isDragging);
+    // const [x, y] = d3.pointer(event, svg.node());
+    // if (overCircle !== null) {
+    //   outerNodes
+    //     .attr("stroke", d => "black");
+    // }
+  }
+
+  function contains(rect, point) {
+    return (
+      point.x >= rect.x &&
+      point.y >= rect.y &&
+      point.x <= rect.x + rect.width &&
+      point.y <= rect.y + rect.height
+    );
+  }
+
   const outerNodes = svg
     .selectAll(".outer-circle")
     .data(alianzasCircles)
@@ -96,7 +160,8 @@ Promise.all([
     .attr("r", (d) => rScale(d.r))
     .attr("fill", (d) => "steelblue")
     .attr("cx", (d) => gScale(d.parent.data.name) + rScale(d.x - d.parent.x))
-    .attr("cy", (d) => stdY + rScale(d.y - d.parent.y));
+    .attr("cy", (d) => stdY + rScale(d.y - d.parent.y))
+    .call(drag);
 
   const gAxis = svg
     .append("g")
