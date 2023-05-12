@@ -67,7 +67,7 @@ input {
   text-align: center;
 }
 
-circle {
+.inner-circle, .inner-circle-label {
   cursor: pointer;
 }
 

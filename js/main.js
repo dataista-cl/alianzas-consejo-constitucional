@@ -39,8 +39,6 @@ Promise.all([
 
   const margin = {"top": 20};
 
-  const stdY = height / 2;
-
   const svg = d3.select("#viz")
     .append("svg")
     .attr("width", width)
@@ -118,7 +116,7 @@ Promise.all([
       .scalePoint()
       .padding(0.5)
       .domain(d3.map(alianzasData.filter(alianza => alianza.partidos.length > 0), (d) => d.nombre))
-      .range([0, width]);
+      .range([20, width-20]);
 
     const root = pack(circlesData);
 
@@ -128,11 +126,17 @@ Promise.all([
 
     const maxRadius = d3.max(alianzasCircles, d => d.r);
 
-    const widthPadding = maxRadius * 2 / 3;
+    const widthPadding = maxRadius * 0.6;
 
     const widthBand = d3.sum(mainnodes, (d) => d.r * 2 + widthPadding);
 
     const rScale = d3.scaleLinear().domain([0, widthBand]).range([0, width]);
+
+    const svgHeight = Math.max(rScale(2 * maxRadius) * 1.4, height);
+    const stdY = svgHeight / 2;
+    
+    svg.attr('height', svgHeight).attr("viewBox", [0, 0, width, svgHeight]);
+    
 
     const drag = d3.drag()
       .on("start", startDragging)
@@ -145,7 +149,9 @@ Promise.all([
         .attr("transform", `translate(${x},${y})`);
       overCircle = overDragCircles(x, y);
       if (overCircle !== null) {
-        outerNodes.filter(d => d.data.name === overCircle.data.name).attr("stroke", "black");
+        outerNodes.filter(d => d.data.name === overCircle.data.name)
+          .attr("stroke", d => alianzasDict[d.data.name].color)
+          .attr("stroke-width", 3);
       } else {
         outerNodes.attr("stroke", "#BBB");
       }
@@ -192,7 +198,7 @@ Promise.all([
       .attr("fill", (d) => "none")
       .attr("stroke", d => alianzasDict[d.data.name].color)
       .attr("opacity", 0.8)
-      .attr("stroke-width", 1.5)
+      .attr("stroke-width", 2)
       .attr("cx", d => gScale(d.data.name))
       .attr("cy", stdY);
 
@@ -254,7 +260,7 @@ Promise.all([
           .text(d => alianzasDict[d].votosTotales + ' votos');
       });
 
-    gAxis.attr("transform", `translate(0, ${height / 2 - rScale(maxRadius) - 20})`);
+    gAxis.attr("transform", `translate(0, ${stdY - rScale(maxRadius) * 1.2})`);
   }
 
   updatePlot(alianzas);
