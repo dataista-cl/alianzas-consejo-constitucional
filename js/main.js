@@ -166,7 +166,7 @@ Promise.all([
     function overDragCircles(x, y) {
       let thisCircle = null;
       alianzasCircles.forEach(circle => {
-        if (Math.pow(x - gScale(circle.data.name), 2) + Math.pow(y - stdY, 2) <= Math.pow(rScale(circle.r), 2)) {
+        if (Math.pow(x - circle.posX, 2) + Math.pow(y - stdY, 2) <= Math.pow(rScale(circle.r), 2)) {
           thisCircle = circle;
         }
       });
