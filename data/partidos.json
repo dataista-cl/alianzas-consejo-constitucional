@@ -1,0 +1,87 @@
+[
+    {
+        "nombre": "FEDERACION REGIONALISTA VERDE SOCIAL",
+        "color": "#83ba21",
+        "nombreCorto": "FRSV"
+    },
+    {
+        "nombre": "PARTIDO COMUNISTA DE CHILE",
+        "color": "#da121a",
+        "nombreCorto": "PC"
+    },
+    {
+        "nombre": "REVOLUCION DEMOCRATICA",
+        "color": "#10803d",
+        "nombreCorto": "RD"
+    },
+    {
+        "nombre": "ACCIÓN HUMANISTA",
+        "color": "#f45a1c",
+        "nombreCorto": "AH"
+    },
+    {
+        "nombre": "PARTIDO LIBERAL DE CHILE",
+        "color": "#ff432d",
+        "nombreCorto": "PL"
+    },
+    {
+        "nombre": "PARTIDO SOCIALISTA DE CHILE",
+        "color": "#b70002",
+        "nombreCorto": "PS"
+    },
+    {
+        "nombre": "CONVERGENCIA SOCIAL",
+        "color": "#5a0958",
+        "nombreCorto": "CS"
+    },
+    {
+        "nombre": "COMUNES",
+        "color": "#451d40",
+        "nombreCorto": "COM"
+    },
+    {
+        "nombre": "PARTIDO POR LA DEMOCRACIA",
+        "color": "#00009c",
+        "nombreCorto": "PPD"
+    },
+    {
+        "nombre": "PARTIDO RADICAL DE CHILE",
+        "color": "#122486",
+        "nombreCorto": "PR"
+    },
+    {
+        "nombre": "PARTIDO DEMOCRATA CRISTIANO",
+        "color": "#011a58",
+        "nombreCorto": "PDC"
+    },
+    {
+        "nombre": "CANDIDATURAS INDEPENDIENTES",
+        "color": "#a139bb",
+        "nombreCorto": "IND"
+    },
+    {
+        "nombre": "PARTIDO DE LA GENTE",
+        "color": "#012c61",
+        "nombreCorto": "PDG"
+    },
+    {
+        "nombre": "RENOVACION NACIONAL",
+        "color": "#123864",
+        "nombreCorto": "RN"
+    },
+    {
+        "nombre": "UNION DEMOCRATA INDEPENDIENTE",
+        "color": "#373f91",
+        "nombreCorto": "UDI"
+    },
+    {
+        "nombre": "EVOLUCION POLITICA",
+        "color": "#0094b8",
+        "nombreCorto": "EVO"
+    },
+    {
+        "nombre": "PARTIDO REPUBLICANO DE CHILE",
+        "color": "#31446c",
+        "nombreCorto": "REP"
+    }
+]
