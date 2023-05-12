@@ -8,11 +8,15 @@ Promise.all([
     cupos = data[1],
     alianzas = data[2];
 
-  let overCircle;
+  let overCircle = null;
 
   votos.forEach(d => {
     d.partido = d.partido.trim();
     d.votos = +d.votos;
+  });
+
+  cupos.forEach(cupo => {
+    cupo.cupos = +cupo.cupos;
   })
 
   console.log(votos, cupos, alianzas);
@@ -32,13 +36,42 @@ Promise.all([
     .style("font", "10px sans-serif")
     .attr("text-anchor", "middle");
 
-  const gScale = d3
-    .scalePoint()
-    .padding(0.5)
-    .domain(d3.map(alianzas, (d) => d.nombre))
-    .range([0, width]);
-
   function updatePlot(alianzasData) {
+
+    // D'Hondt
+    const mostVotes = cupos.map(cupo => {
+
+      // Calculate votes per alianza for each region
+      const alianzaVotes = alianzasData.map(alianza => {
+        const votosAlianza = votos.filter(voto => (voto.region === cupo.region) & (alianza.partidos.includes(voto.partido)))
+          .reduce((a,b) => a + b.votos, 0);
+
+        return {
+          "nombre": alianza.nombre,
+          "votosTotales": votosAlianza
+        }
+      });
+
+      // Simulates D'Hondt voting by diving alianza votes per number of seats
+      const allVotes = alianzaVotes.map(alianza => {
+        return d3.range(1, cupo.cupos + 1).map(idx => {
+            return {
+              "nombre": alianza.nombre,
+              "votos": alianza.votosTotales / idx
+            }
+          })
+      }).flat();
+
+      // Select the most voted based on number of seats
+      return allVotes.sort((a,b) => b.votos - a.votos).slice(0, cupo.cupos);
+    }).flat();
+
+    alianzasData.forEach(alianza => {
+      alianza.votosTotales = votos.filter(voto => alianza.partidos.includes(voto.partido))
+        .reduce((a,b) => a + b.votos, 0);
+      alianza.nRepresentantes = mostVotes.filter(vote => alianza.nombre === vote.nombre).length;
+    });
+
     const circlesData = {
       "name": "All",
       "children": alianzasData.map(alianza => {
@@ -62,6 +95,12 @@ Promise.all([
             .hierarchy(data)
             .sum(d => d.value)
         );
+
+    const gScale = d3
+      .scalePoint()
+      .padding(0.5)
+      .domain(d3.map(alianzasData, (d) => d.nombre))
+      .range([0, width]);
 
     const root = pack(circlesData);
 
