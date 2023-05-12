@@ -2,13 +2,16 @@ Promise.all([
   d3.csv("data/votos.csv"),
   d3.csv("data/cupos.csv"),
   d3.json("data/alianzas.json"),
-  d3.json("data/partidos.json")
+  d3.json("data/partidos.json"),
+  d3.json("js/es-ES.json")
 ]).then(function(data){
 
   const votos = data[0],
     cupos = data[1],
     alianzas = data[2],
     partidos = data[3];
+
+  d3.formatDefaultLocale(data[4]);
 
   const partidosDict = {},
     alianzasDict = {};
@@ -84,7 +87,8 @@ Promise.all([
       alianzasDict[alianza.nombre] = {
         "color": alianza.color,
         "votosTotales": alianza.votosTotales,
-        "nRepresentantes": alianza.nRepresentantes
+        "nRepresentantes": alianza.nRepresentantes,
+        "nombres": alianza.nombres
       }
     });
 
@@ -250,16 +254,16 @@ Promise.all([
       .data(alianzasCircles)
       .join("g")
         .attr("class", "alianza-labels")
-        .attr("fill", d => {
-          console.log(d);
-          return alianzasDict[d.data.name].color
-        })
+        .attr("fill", d => alianzasDict[d.data.name].color)
         .attr("transform", d => `translate(${d.posX},${stdY - rScale(maxRadius) * 1.4})`)
     
     labels.selectAll("text")
-      .data(d => [d.data.name, alianzasDict[d.data.name].nRepresentantes + " escaños", alianzasDict[d.data.name].votosTotales + ' votos'])
+      .data(d => [...alianzasDict[d.data.name].nombres, alianzasDict[d.data.name].nRepresentantes + " escaños", d3.format(",")(alianzasDict[d.data.name].votosTotales) + ' votos'])
       .join("text")
-        .attr("dy", (d,i) => i * 12)
+        .attr("dy", (d,i) => i * 16)
+        .style("font-size", (d,i) => i <= 1 ? 16 : 14)
+        .style("font-weight", d => d.includes('votos') ? 300 : d.includes('escaños') ? 400 : 500)
+        .style("letter-spacing", "-0.5px")
         .text(d => d);
 
   }

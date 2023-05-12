@@ -4,31 +4,37 @@
         "color": "#f43333",
         "partidos": ["FEDERACION REGIONALISTA VERDE SOCIAL", "PARTIDO COMUNISTA DE CHILE", "REVOLUCION DEMOCRATICA",
                     "ACCIÓN HUMANISTA", "PARTIDO LIBERAL DE CHILE", "PARTIDO SOCIALISTA DE CHILE", "CONVERGENCIA SOCIAL",
-                    "COMUNES"]
+                    "COMUNES"],
+        "nombres": ["Unidad", "para Chile"]
     },
     {
         "nombre": "Todo por Chile",
         "color": "#ff9826",
-        "partidos": ["PARTIDO POR LA DEMOCRACIA", "PARTIDO RADICAL DE CHILE", "PARTIDO DEMOCRATA CRISTIANO"]
+        "partidos": ["PARTIDO POR LA DEMOCRACIA", "PARTIDO RADICAL DE CHILE", "PARTIDO DEMOCRATA CRISTIANO"],
+        "nombres": ["Todo por", "Chile"]
     },
     {
         "nombre": "Independientes",
         "color": "#a139bb",
-        "partidos": ["CANDIDATURAS INDEPENDIENTES"]
+        "partidos": ["CANDIDATURAS INDEPENDIENTES"],
+        "nombres": ["Pactos", "Independientes"]
     },
     {
         "nombre": "Partido de la Gente",
         "color": "#48ab24",
-        "partidos": ["PARTIDO DE LA GENTE"]
+        "partidos": ["PARTIDO DE LA GENTE"],
+        "nombres": ["Partido de", "la Gente"]
     },
     {
         "nombre": "Chile Seguro",
         "color": "#2bbaee",
-        "partidos": ["RENOVACION NACIONAL", "UNION DEMOCRATA INDEPENDIENTE", "EVOLUCION POLITICA"]
+        "partidos": ["RENOVACION NACIONAL", "UNION DEMOCRATA INDEPENDIENTE", "EVOLUCION POLITICA"],
+        "nombres": ["Chile", "Seguro"]
     },
     {
         "nombre": "Partido Republicano",
         "color": "#0c228d",
-        "partidos": ["PARTIDO REPUBLICANO DE CHILE"]
+        "partidos": ["PARTIDO REPUBLICANO DE CHILE"],
+        "nombres": ["Partido", "Republicano"]
     }
 ]

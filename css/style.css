@@ -132,6 +132,10 @@ h6 {
   margin: 0;
 }
 
+svg text {
+  font-family: 'Roboto Mono', monospace;
+}
+
 @media only screen and (max-width: 768px) {
   body {
     font-size: 12px;
