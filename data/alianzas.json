@@ -1,28 +1,34 @@
 [
     {
         "nombre": "Unidad para Chile",
+        "color": "#f43333",
         "partidos": ["FEDERACION REGIONALISTA VERDE SOCIAL", "PARTIDO COMUNISTA DE CHILE", "REVOLUCION DEMOCRATICA",
                     "ACCIÓN HUMANISTA", "PARTIDO LIBERAL DE CHILE", "PARTIDO SOCIALISTA DE CHILE", "CONVERGENCIA SOCIAL",
                     "COMUNES"]
     },
     {
         "nombre": "Todo por Chile",
+        "color": "#ff9826",
         "partidos": ["PARTIDO POR LA DEMOCRACIA", "PARTIDO RADICAL DE CHILE", "PARTIDO DEMOCRATA CRISTIANO"]
     },
     {
         "nombre": "Independientes",
+        "color": "#a139bb",
         "partidos": ["CANDIDATURAS INDEPENDIENTES"]
     },
     {
         "nombre": "Partido de la Gente",
+        "color": "#48ab24",
         "partidos": ["PARTIDO DE LA GENTE"]
     },
     {
         "nombre": "Chile Seguro",
+        "color": "#0c228d",
         "partidos": ["RENOVACION NACIONAL", "UNION DEMOCRATA INDEPENDIENTE", "EVOLUCION POLITICA"]
     },
     {
         "nombre": "Partido Republicano",
+        "color": "#2bbaee",
         "partidos": ["PARTIDO REPUBLICANO DE CHILE"]
     }
 ]

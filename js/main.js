@@ -199,14 +199,16 @@ Promise.all([
       .call((g) => {
         g.select(".domain").remove();
         g.selectAll(".tick line").remove();
+        g.selectAll("text")
+          .attr("fill", d => alianzasData.filter(alianza => alianza.nombre === d)[0].color)
         g.selectAll(".tick").append("text")
           .attr("class", "representantes-labels")
-          .attr("fill", "black")
+          .attr("fill", d => alianzasData.filter(alianza => alianza.nombre === d)[0].color)
           .attr("dy", 2)
           .text(d => alianzasData.filter(alianza => alianza.nombre === d)[0].nRepresentantes + ' representantes');
         g.selectAll(".tick").append("text")
           .attr("class", "votos-labels")
-          .attr("fill", "black")
+          .attr("fill", d => alianzasData.filter(alianza => alianza.nombre === d)[0].color)
           .attr("dy", 12)
           .text(d => alianzasData.filter(alianza => alianza.nombre === d)[0].votosTotales + ' votos');
       });
