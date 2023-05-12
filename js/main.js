@@ -85,7 +85,7 @@ Promise.all([
       alianza.nRepresentantes = mostVotes.filter(vote => alianza.nombre === vote.nombre).length;
       alianzasDict[alianza.nombre] = {
         "color": alianza.color,
-        "votosTotales": alianza.votoTotales,
+        "votosTotales": alianza.votosTotales,
         "nRepresentantes": alianza.nRepresentantes
       }
     });
@@ -128,8 +128,7 @@ Promise.all([
 
     const maxRadius = d3.max(alianzasCircles, d => d.r);
 
-    console.log(maxRadius)
-    const widthPadding = maxRadius;
+    const widthPadding = maxRadius * 2 / 3;
 
     const widthBand = d3.sum(mainnodes, (d) => d.r * 2 + widthPadding);
 
