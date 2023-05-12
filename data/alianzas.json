@@ -23,12 +23,12 @@
     },
     {
         "nombre": "Chile Seguro",
-        "color": "#0c228d",
+        "color": "#2bbaee",
         "partidos": ["RENOVACION NACIONAL", "UNION DEMOCRATA INDEPENDIENTE", "EVOLUCION POLITICA"]
     },
     {
         "nombre": "Partido Republicano",
-        "color": "#2bbaee",
+        "color": "#0c228d",
         "partidos": ["PARTIDO REPUBLICANO DE CHILE"]
     }
 ]
