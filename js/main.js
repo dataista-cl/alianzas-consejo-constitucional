@@ -1,12 +1,27 @@
 Promise.all([
   d3.csv("data/votos.csv"),
   d3.csv("data/cupos.csv"),
-  d3.json("data/alianzas.json")
+  d3.json("data/alianzas.json"),
+  d3.json("data/partidos.json")
 ]).then(function(data){
 
   const votos = data[0],
     cupos = data[1],
-    alianzas = data[2];
+    alianzas = data[2],
+    partidos = data[3];
+
+  const partidosDict = {},
+    alianzasDict = {};
+  
+  partidos.forEach(partido => {
+    let colorFill = d3.color(partido.color);
+    colorFill.opacity = 0.5;
+    partidosDict[partido.nombre] = {
+      "colorFill": colorFill,
+      "colorStroke": d3.color(partido.color),
+      "nombreCorto": partido.nombreCorto
+    }
+  });
 
   let overCircle = null;
 
@@ -18,8 +33,6 @@ Promise.all([
   cupos.forEach(cupo => {
     cupo.cupos = +cupo.cupos;
   })
-
-  console.log(votos, cupos, alianzas);
 
   const width = 1000,
     height = 300;
@@ -70,6 +83,11 @@ Promise.all([
       alianza.votosTotales = votos.filter(voto => alianza.partidos.includes(voto.partido))
         .reduce((a,b) => a + b.votos, 0);
       alianza.nRepresentantes = mostVotes.filter(vote => alianza.nombre === vote.nombre).length;
+      alianzasDict[alianza.nombre] = {
+        "color": alianza.color,
+        "votosTotales": alianza.votoTotales,
+        "nRepresentantes": alianza.nRepresentantes
+      }
     });
 
     const circlesData = {
@@ -173,7 +191,8 @@ Promise.all([
       .attr("class", "outer-circle")
       .attr("r", (d) => rScale(d.r))
       .attr("fill", (d) => "none")
-      .attr("stroke", d => "#BBB")
+      .attr("stroke", d => alianzasDict[d.data.name].color)
+      .attr("opacity", 0.8)
       .attr("stroke-width", 1.5)
       .attr("cx", d => gScale(d.data.name))
       .attr("cy", stdY);
@@ -184,11 +203,30 @@ Promise.all([
       .join("circle")
       .attr("class", "inner-circle")
       .attr("r", (d) => rScale(d.r))
-      .attr("fill", (d) => "steelblue")
+      .attr("fill", (d) => partidosDict[d.data.name].colorFill)
+      .attr("opacity", 0.5)
+      .attr("stroke", d => partidosDict[d.data.name].colorStroke)
+      .attr("stroke-width", 1.5)
       .attr("cx", (d) => gScale(d.parent.data.name) + rScale(d.x - d.parent.x))
       .attr("cy", (d) => stdY + rScale(d.y - d.parent.y))
       .attr("transform", `translate(0,0)`)
       .call(drag);
+
+    const fontSize = 24;
+
+    const innerText = svg
+      .selectAll(".inner-circle-label")
+      .data(alianzasCircles.map(d => d.children).flat())
+      .join("text")
+      .attr("class", "inner-circle-label")
+      .attr("fill", (d) => partidosDict[d.data.name].colorStroke)
+      .style("font-size", d => d3.min([fontSize, rScale(d.r)*2/3]))
+      .style("font-weight", 700)
+      .attr("dominant-baseline", "middle")
+      .attr("x", (d) => gScale(d.parent.data.name) + rScale(d.x - d.parent.x))
+      .attr("y", (d) => stdY + rScale(d.y - d.parent.y))
+      .attr("transform", `translate(0,0)`)
+      .text(d => partidosDict[d.data.name].nombreCorto);
 
     svg.selectAll(".labels").remove();
 
@@ -200,17 +238,17 @@ Promise.all([
         g.select(".domain").remove();
         g.selectAll(".tick line").remove();
         g.selectAll("text")
-          .attr("fill", d => alianzasData.filter(alianza => alianza.nombre === d)[0].color)
+          .attr("fill", d => alianzasDict[d].color)
         g.selectAll(".tick").append("text")
           .attr("class", "representantes-labels")
-          .attr("fill", d => alianzasData.filter(alianza => alianza.nombre === d)[0].color)
+          .attr("fill", d => alianzasDict[d].color)
           .attr("dy", 2)
-          .text(d => alianzasData.filter(alianza => alianza.nombre === d)[0].nRepresentantes + ' representantes');
+          .text(d => alianzasDict[d].nRepresentantes + ' representantes');
         g.selectAll(".tick").append("text")
           .attr("class", "votos-labels")
-          .attr("fill", d => alianzasData.filter(alianza => alianza.nombre === d)[0].color)
+          .attr("fill", d => alianzasDict[d].color)
           .attr("dy", 12)
-          .text(d => alianzasData.filter(alianza => alianza.nombre === d)[0].votosTotales + ' votos');
+          .text(d => alianzasDict[d].votosTotales + ' votos');
       });
 
     gAxis.attr("transform", `translate(0, ${height / 2 - rScale(maxRadius) - 20})`);
