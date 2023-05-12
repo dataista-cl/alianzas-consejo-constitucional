@@ -132,11 +132,17 @@ Promise.all([
 
     const rScale = d3.scaleLinear().domain([0, widthBand]).range([0, width]);
 
-    const svgHeight = Math.max(rScale(2 * maxRadius) * 1.4, height);
+    const svgHeight = Math.max(rScale(2 * maxRadius) * 1.5, height);
     const stdY = svgHeight / 2;
+
+    const circlePadding = 50
+    let cumPos = circlePadding;
+    alianzasCircles.forEach(alianza => {
+      alianza.posX = cumPos + rScale(alianza.r);
+      cumPos += 2 * rScale(alianza.r) + circlePadding;
+    });
     
     svg.attr('height', svgHeight).attr("viewBox", [0, 0, width, svgHeight]);
-    
 
     const drag = d3.drag()
       .on("start", startDragging)
@@ -199,14 +205,14 @@ Promise.all([
       .attr("stroke", d => alianzasDict[d.data.name].color)
       .attr("opacity", 0.8)
       .attr("stroke-width", 2)
-      .attr("cx", d => gScale(d.data.name))
+      .attr("cx", d => d.posX)
       .attr("cy", stdY);
 
     const groups = svg.selectAll(".partido")
       .data(alianzasCircles.map(d => d.children).flat())
       .join("g")
         .attr("class", "partido")
-        .attr("transform", d => `translate(${gScale(d.parent.data.name) + rScale(d.x - d.parent.x)},${stdY + rScale(d.y - d.parent.y)})`)
+        .attr("transform", d => `translate(${d.parent.posX + rScale(d.x - d.parent.x)},${stdY + rScale(d.y - d.parent.y)})`)
         .call(drag);
 
     groups.selectAll(".inner-circle")
@@ -239,30 +245,24 @@ Promise.all([
 
     svg.selectAll(".labels").remove();
 
-    const gAxis = svg
-      .append("g")
-      .attr("class", "labels")
-      .call(d3.axisTop(gScale))
-      .call((g) => {
-        g.select(".domain").remove();
-        g.selectAll(".tick line").remove();
-        g.selectAll("text")
-          .attr("fill", d => alianzasDict[d].color)
-        g.selectAll(".tick").append("text")
-          .attr("class", "representantes-labels")
-          .attr("fill", d => alianzasDict[d].color)
-          .attr("dy", 2)
-          .text(d => alianzasDict[d].nRepresentantes + ' representantes');
-        g.selectAll(".tick").append("text")
-          .attr("class", "votos-labels")
-          .attr("fill", d => alianzasDict[d].color)
-          .attr("dy", 12)
-          .text(d => alianzasDict[d].votosTotales + ' votos');
-      });
+    const labels = svg
+      .selectAll(".alianza-labels")
+      .data(alianzasCircles)
+      .join("g")
+        .attr("class", "alianza-labels")
+        .attr("fill", d => {
+          console.log(d);
+          return alianzasDict[d.data.name].color
+        })
+        .attr("transform", d => `translate(${d.posX},${stdY - rScale(maxRadius) * 1.4})`)
+    
+    labels.selectAll("text")
+      .data(d => [d.data.name, alianzasDict[d.data.name].nRepresentantes + " escaños", alianzasDict[d.data.name].votosTotales + ' votos'])
+      .join("text")
+        .attr("dy", (d,i) => i * 12)
+        .text(d => d);
 
-    gAxis.attr("transform", `translate(0, ${stdY - rScale(maxRadius) * 1.2})`);
   }
-
   updatePlot(alianzas);
 
 })
