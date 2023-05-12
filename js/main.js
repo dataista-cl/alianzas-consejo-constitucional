@@ -85,7 +85,6 @@ Promise.all([
 
   function dragCircle(event, d) {
     const [x, y] = d3.pointer(event, svg.node());
-    // console.log(x,y);
     d3.select(this)
       .attr("transform", `translate(${x - gScale(d.parent.data.name)},${y - stdY})`);
     overCircle = overDragCircles(x, y);
@@ -107,38 +106,27 @@ Promise.all([
   }
   
   function startDragging(event) {
-    const isDragging = true;
     d3.select(this)
-      // .classed("dragging", isDragging)
-      .raise(); // SVG elements don't have a z-index so bring the circle to the top
+      .raise();
   }
   
-  function endDragging(event) {
-    console.log(overCircle);
+  function endDragging(event, d) {
     if (overCircle === null) {
       d3.select(this)
         .transition(100)
         .attr("transform", `translate(0,0)`);
+    } else {
+      alianzas.forEach(alianza => {
+        if (alianza.partidos.includes(d.data.name)) {
+          let index = alianza.partidos.indexOf(d.data.name);
+          alianza.partidos.splice(index, 1);
+        }
+      });
+      alianzas.filter(alianza => alianza.nombre === overCircle.data.name)[0].partidos.push(d.data.name);
+      console.log(alianzas);
     }
-    // const isDragging = false
-    // const circle = d3.select(this)
-    //   .classed("dragging", isDragging);
-    // updateRect(isDragging);
-    // const [x, y] = d3.pointer(event, svg.node());
-    // if (overCircle !== null) {
-    //   outerNodes
-    //     .attr("stroke", d => "black");
-    // }
   }
 
-  function contains(rect, point) {
-    return (
-      point.x >= rect.x &&
-      point.y >= rect.y &&
-      point.x <= rect.x + rect.width &&
-      point.y <= rect.y + rect.height
-    );
-  }
 
   const outerNodes = svg
     .selectAll(".outer-circle")
