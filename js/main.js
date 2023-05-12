@@ -142,7 +142,7 @@ Promise.all([
     function dragCircle(event, d) {
       const [x, y] = d3.pointer(event, svg.node());
       d3.select(this)
-        .attr("transform", `translate(${x - gScale(d.parent.data.name)},${y - stdY})`);
+        .attr("transform", `translate(${x},${y})`);
       overCircle = overDragCircles(x, y);
       if (overCircle !== null) {
         outerNodes.filter(d => d.data.name === overCircle.data.name).attr("stroke", "black");
@@ -170,7 +170,7 @@ Promise.all([
       if (overCircle === null) {
         d3.select(this)
           .transition(100)
-          .attr("transform", `translate(0,0)`);
+          .attr("transform", d => `translate(${gScale(d.parent.data.name) + rScale(d.x - d.parent.x)},${stdY + rScale(d.y - d.parent.y)})`)
       } else {
         alianzas.forEach(alianza => {
           if (alianza.partidos.includes(d.data.name)) {
@@ -196,9 +196,15 @@ Promise.all([
       .attr("cx", d => gScale(d.data.name))
       .attr("cy", stdY);
 
-    const innerNodes = svg
-      .selectAll(".inner-circle")
+    const groups = svg.selectAll(".partido")
       .data(alianzasCircles.map(d => d.children).flat())
+      .join("g")
+        .attr("class", "partido")
+        .attr("transform", d => `translate(${gScale(d.parent.data.name) + rScale(d.x - d.parent.x)},${stdY + rScale(d.y - d.parent.y)})`)
+        .call(drag);
+
+    groups.selectAll(".inner-circle")
+      .data(d => [d])
       .join("circle")
       .attr("class", "inner-circle")
       .attr("r", (d) => rScale(d.r))
@@ -206,24 +212,22 @@ Promise.all([
       .attr("opacity", 0.5)
       .attr("stroke", d => partidosDict[d.data.name].colorStroke)
       .attr("stroke-width", 1.5)
-      .attr("cx", (d) => gScale(d.parent.data.name) + rScale(d.x - d.parent.x))
-      .attr("cy", (d) => stdY + rScale(d.y - d.parent.y))
-      .attr("transform", `translate(0,0)`)
-      .call(drag);
+      // .attr("cx", (d) => rScale(d.x - d.parent.x))
+      // .attr("cy", (d) => rScale(d.y - d.parent.y))
+      .attr("transform", `translate(0,0)`);
 
     const fontSize = 24;
 
-    const innerText = svg
-      .selectAll(".inner-circle-label")
-      .data(alianzasCircles.map(d => d.children).flat())
+    groups.selectAll(".inner-circle-label")
+      .data(d =>[d])
       .join("text")
       .attr("class", "inner-circle-label")
       .attr("fill", (d) => partidosDict[d.data.name].colorStroke)
       .style("font-size", d => d3.min([fontSize, rScale(d.r)*2/3]))
       .style("font-weight", 700)
       .attr("dominant-baseline", "middle")
-      .attr("x", (d) => gScale(d.parent.data.name) + rScale(d.x - d.parent.x))
-      .attr("y", (d) => stdY + rScale(d.y - d.parent.y))
+      // .attr("x", (d) => rScale(d.x - d.parent.x))
+      // .attr("y", (d) => rScale(d.y - d.parent.y))
       .attr("transform", `translate(0,0)`)
       .text(d => partidosDict[d.data.name].nombreCorto);
 
