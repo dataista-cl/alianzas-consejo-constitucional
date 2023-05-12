@@ -76,33 +76,27 @@ Promise.all([
 
   const maxRadius = d3.max(alianzasCircles, d => d.r);
 
-  const node = svg
-    .selectAll("g")
-    .data(alianzasCircles)
-    .join("g")
-    .attr("transform", (d) => `translate(${gScale(d.data.name)},${stdY})`);
-
-  const outerNodes = node
+  const outerNodes = svg
     .selectAll(".outer-circle")
-    .data((d) => [d])
+    .data(alianzasCircles)
     .join("circle")
     .attr("class", "outer-circle")
     .attr("r", (d) => rScale(d.r))
     .attr("fill", (d) => "none")
     .attr("stroke", d => "#BBB")
     .attr("stroke-width", 1.5)
-    .attr("cx", 0)
-    .attr("cy", 0);
+    .attr("cx", d => gScale(d.data.name))
+    .attr("cy", stdY);
 
-  const innerNodes = node
+  const innerNodes = svg
     .selectAll(".inner-circle")
-    .data((d) => d.children)
+    .data(alianzasCircles.map(d => d.children).flat())
     .join("circle")
     .attr("class", "inner-circle")
     .attr("r", (d) => rScale(d.r))
     .attr("fill", (d) => "steelblue")
-    .attr("cx", (d) => rScale(d.x - d.parent.x))
-    .attr("cy", (d) => rScale(d.y - d.parent.y));
+    .attr("cx", (d) => gScale(d.parent.data.name) + rScale(d.x - d.parent.x))
+    .attr("cy", (d) => stdY + rScale(d.y - d.parent.y));
 
   const gAxis = svg
     .append("g")
