@@ -17,7 +17,7 @@
         "nombre": "Independientes",
         "color": "#a139bb",
         "partidos": ["CANDIDATURAS INDEPENDIENTES"],
-        "nombres": ["Pactos", "Independientes"]
+        "nombres": ["", "Indep."]
     },
     {
         "nombre": "Partido de la Gente",

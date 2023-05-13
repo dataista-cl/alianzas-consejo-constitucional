@@ -38,7 +38,7 @@ Promise.all([
   })
 
   const width = 1000,
-    height = 300;
+    height = 400;
 
   const margin = {"top": 20};
 
@@ -213,7 +213,7 @@ Promise.all([
       .attr("cy", stdY);
 
     const groups = svg.selectAll(".partido")
-      .data(alianzasCircles.map(d => d.children).flat())
+      .data(alianzasCircles.map(d => d.children).sort((a,b) => b.r - a.r).flat())
       .join("g")
         .attr("class", "partido")
         .attr("transform", d => `translate(${d.parent.posX + rScale(d.x - d.parent.x)},${stdY + rScale(d.y - d.parent.y)})`)
@@ -255,10 +255,10 @@ Promise.all([
       .join("g")
         .attr("class", "alianza-labels")
         .attr("fill", d => alianzasDict[d.data.name].color)
-        .attr("transform", d => `translate(${d.posX},${stdY - rScale(maxRadius) * 1.4})`)
+        .attr("transform", d => `translate(${d.posX},20)`)
     
     labels.selectAll("text")
-      .data(d => [...alianzasDict[d.data.name].nombres, alianzasDict[d.data.name].nRepresentantes + " escaños", d3.format(",")(alianzasDict[d.data.name].votosTotales) + ' votos'])
+      .data(d => [...alianzasDict[d.data.name].nombres, alianzasDict[d.data.name].nRepresentantes + " escaños", d3.format(".3s")(alianzasDict[d.data.name].votosTotales) + ' votos'])
       .join("text")
         .attr("dy", (d,i) => i * 16)
         .style("font-size", (d,i) => i <= 1 ? 16 : 14)
