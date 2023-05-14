@@ -221,10 +221,10 @@ Promise.all([
           "nombre": "Pacto " + (pactoNumber),
           "color": partidosDict[d.data.name].colorStroke,
           "partidos": [d.data.name],
-          "nombres": ["Nuevo", "Pacto " + (alianzas.length + 1)]
+          "nombres": ["Nuevo", "Pacto " + pactoNumber]
         });
-        updatePlot(alianzasData);
       } else if (overCircle.data.children.filter(ch => ch.name === d.data.name).length != 1) {
+        pactoNumber++;
         alianzasData.forEach((alianza, idx) => {
           if (alianza.partidos.includes(d.data.name)) {
             let index = alianza.partidos.indexOf(d.data.name);
@@ -235,8 +235,8 @@ Promise.all([
         });
         if (removeIdx !== null) alianzasData.splice(removeIdx, 1);
         alianzasData.filter(alianza => alianza.nombre === overCircle.data.name)[0].partidos.push(d.data.name);
-        updatePlot(alianzasData);
       }
+      updatePlot(alianzasData);
     }
 
     const outerNodes = svg
