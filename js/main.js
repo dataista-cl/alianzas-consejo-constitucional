@@ -41,7 +41,7 @@ Promise.all([
   const width = 1000,
     height = 400;
 
-  const margin = {"top": 20};
+  const margin = {"top": 80, "bottom": 20};
 
   const ncols = 6;
 
@@ -141,7 +141,7 @@ Promise.all([
 
     const rScale = d3.scaleLinear().domain([0, widthBand]).range([0, width]);
 
-    const svgHeight = nrows * 2 * (rScale(maxRadius) + 80);
+    const svgHeight = nrows * 2 * (rScale(maxRadius) + margin.top + margin.bottom);
     const stdY = svgHeight / 2;
 
     const circlePadding = 50
@@ -156,7 +156,7 @@ Promise.all([
       alianza.posX = cumPos + pactoWidth;
       cumPos += 2 * pactoWidth + circlePadding;
 
-      alianza.posY = (2 * row - 1) * (80 + rScale(maxRadius));
+      alianza.posY = row * margin.top + (row - 1) * margin.bottom + (2 * row - 1) * rScale(maxRadius);
     });
     
     svg.attr('height', svgHeight).attr("viewBox", [0, 0, width, svgHeight]);
