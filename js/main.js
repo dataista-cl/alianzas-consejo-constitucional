@@ -26,7 +26,8 @@ Promise.all([
     }
   });
 
-  let overCircle = null;
+  let overCircle = null,
+    pactoNumber = alianzas.length + 1;
 
   votos.forEach(d => {
     d.partido = d.partido.trim();
@@ -42,6 +43,8 @@ Promise.all([
 
   const margin = {"top": 20};
 
+  const ncols = 6;
+
   const svg = d3.select("#viz")
     .append("svg")
     .attr("width", width)
@@ -51,6 +54,8 @@ Promise.all([
     .attr("text-anchor", "middle");
 
   function updatePlot(alianzasData) {
+
+    const nrows = Math.ceil(alianzasData.length / ncols);
 
     // D'Hondt
     const mostVotes = cupos.map(cupo => {
@@ -136,14 +141,22 @@ Promise.all([
 
     const rScale = d3.scaleLinear().domain([0, widthBand]).range([0, width]);
 
-    const svgHeight = Math.max(rScale(2 * maxRadius) * 1.5, height);
+    const svgHeight = nrows * 2 * (rScale(maxRadius) + 80);
     const stdY = svgHeight / 2;
 
     const circlePadding = 50
     let cumPos = circlePadding;
-    alianzasCircles.forEach(alianza => {
-      alianza.posX = cumPos + rScale(alianza.r);
-      cumPos += 2 * rScale(alianza.r) + circlePadding;
+    alianzasCircles.forEach((alianza, alianzaIdx) => {
+      const col = Math.floor(alianzaIdx % ncols),
+        row = Math.floor(alianzaIdx / ncols) + 1;
+      if (col === 0) cumPos = circlePadding;
+
+      const pactoWidth = Math.max(rScale(alianza.r), 20);
+
+      alianza.posX = cumPos + pactoWidth;
+      cumPos += 2 * pactoWidth + circlePadding;
+
+      alianza.posY = (2 * row - 1) * (80 + rScale(maxRadius));
     });
     
     svg.attr('height', svgHeight).attr("viewBox", [0, 0, width, svgHeight]);
@@ -170,7 +183,7 @@ Promise.all([
     function overDragCircles(x, y) {
       let thisCircle = null;
       alianzasCircles.forEach(circle => {
-        if (Math.pow(x - circle.posX, 2) + Math.pow(y - stdY, 2) <= Math.pow(rScale(circle.r), 2)) {
+        if (Math.pow(x - circle.posX, 2) + Math.pow(y - circle.posY, 2) <= Math.pow(rScale(circle.r), 2)) {
           thisCircle = circle;
         }
       });
@@ -183,15 +196,19 @@ Promise.all([
     }
     
     function endDragging(event, d) {
-      alianzasData.forEach(alianza => {
+      let removeIdx = null;
+      alianzasData.forEach((alianza, idx) => {
         if (alianza.partidos.includes(d.data.name)) {
           let index = alianza.partidos.indexOf(d.data.name);
           alianza.partidos.splice(index, 1);
+
+          if (alianza.partidos.length === 0) removeIdx = idx;
         }
       });
+      if (removeIdx !== null) alianzasData.splice(removeIdx, 1);
       if (overCircle === null) {
         alianzasData.push({
-          "nombre": "Pacto " + (alianzas.length + 1),
+          "nombre": "Pacto " + (pactoNumber++),
           "color": partidosDict[d.data.name].colorStroke,
           "partidos": [d.data.name],
           "nombres": ["Nuevo", "Pacto " + (alianzas.length + 1)]
@@ -213,13 +230,13 @@ Promise.all([
       .attr("opacity", 0.8)
       .attr("stroke-width", 2)
       .attr("cx", d => d.posX)
-      .attr("cy", stdY);
+      .attr("cy", d => d.posY);
 
     const groups = svg.selectAll(".partido")
       .data(alianzasCircles.map(d => d.children).sort((a,b) => b.r - a.r).flat())
       .join("g")
         .attr("class", "partido")
-        .attr("transform", d => `translate(${d.parent.posX + rScale(d.x - d.parent.x)},${stdY + rScale(d.y - d.parent.y)})`)
+        .attr("transform", d => `translate(${d.parent.posX + rScale(d.x - d.parent.x)},${d.parent.posY + rScale(d.y - d.parent.y)})`)
         .call(drag);
 
     groups.selectAll(".inner-circle")
@@ -258,14 +275,16 @@ Promise.all([
       .join("g")
         .attr("class", "alianza-labels")
         .attr("fill", d => alianzasDict[d.data.name].color)
-        .attr("transform", d => `translate(${d.posX},20)`)
+        .attr("transform", d => `translate(${d.posX},${d.posY - rScale(maxRadius) - 60})`)
     
     labels.selectAll("text")
-      .data(d => [...alianzasDict[d.data.name].nombres, alianzasDict[d.data.name].nRepresentantes + " escaños", d3.format(".3s")(alianzasDict[d.data.name].votosTotales) + ' votos'])
+      .data(d => [...alianzasDict[d.data.name].nombres,
+        alianzasDict[d.data.name].nRepresentantes === 1 ? alianzasDict[d.data.name].nRepresentantes + " escaño" : alianzasDict[d.data.name].nRepresentantes + " escaños",
+        d3.format(".3s")(alianzasDict[d.data.name].votosTotales) + ' votos'])
       .join("text")
         .attr("dy", (d,i) => i * 16)
         .style("font-size", (d,i) => i <= 1 ? 16 : 14)
-        .style("font-weight", d => d.includes('votos') ? 300 : d.includes('escaños') ? 400 : 500)
+        .style("font-weight", d => d.includes('votos') ? 300 : d.includes('escaño') ? 400 : 500)
         .style("letter-spacing", "-0.5px")
         .text(d => d);
 
