@@ -158,6 +158,13 @@ Promise.all([
 
       alianza.posY = row * margin.top + (row - 1) * margin.bottom + (2 * row - 1) * rScale(maxRadius);
     });
+
+    const posXExtent = d3.extent(alianzasCircles, d => d.posX);
+    const midX = d3.sum(posXExtent) / 2;
+
+    alianzasCircles.forEach(alianza => {
+      alianza.posX = alianza.posX * width / 2 / midX;
+    })
     
     svg.attr('height', svgHeight).attr("viewBox", [0, 0, width, svgHeight]);
 
@@ -196,27 +203,40 @@ Promise.all([
     }
     
     function endDragging(event, d) {
+      const [x, y] = d3.pointer(event, svg.node());
+      overCircle = overDragCircles(x, y);
       let removeIdx = null;
-      alianzasData.forEach((alianza, idx) => {
-        if (alianza.partidos.includes(d.data.name)) {
-          let index = alianza.partidos.indexOf(d.data.name);
-          alianza.partidos.splice(index, 1);
-
-          if (alianza.partidos.length === 0) removeIdx = idx;
-        }
-      });
-      if (removeIdx !== null) alianzasData.splice(removeIdx, 1);
       if (overCircle === null) {
+        alianzasData.forEach((alianza, idx) => {
+          if (alianza.partidos.includes(d.data.name)) {
+            let index = alianza.partidos.indexOf(d.data.name);
+            alianza.partidos.splice(index, 1);
+
+            if (alianza.partidos.length === 0) removeIdx = idx;
+          }
+        });
+        if (removeIdx !== null) alianzasData.splice(removeIdx, 1);
+        pactoNumber++;
         alianzasData.push({
-          "nombre": "Pacto " + (pactoNumber++),
+          "nombre": "Pacto " + (pactoNumber),
           "color": partidosDict[d.data.name].colorStroke,
           "partidos": [d.data.name],
           "nombres": ["Nuevo", "Pacto " + (alianzas.length + 1)]
-        })
-      } else {
+        });
+        updatePlot(alianzasData);
+      } else if (overCircle.data.children.filter(ch => ch.name === d.data.name).length != 1) {
+        alianzasData.forEach((alianza, idx) => {
+          if (alianza.partidos.includes(d.data.name)) {
+            let index = alianza.partidos.indexOf(d.data.name);
+            alianza.partidos.splice(index, 1);
+
+            if (alianza.partidos.length === 0) removeIdx = idx;
+          }
+        });
+        if (removeIdx !== null) alianzasData.splice(removeIdx, 1);
         alianzasData.filter(alianza => alianza.nombre === overCircle.data.name)[0].partidos.push(d.data.name);
+        updatePlot(alianzasData);
       }
-      updatePlot(alianzasData);
     }
 
     const outerNodes = svg
