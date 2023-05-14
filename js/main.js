@@ -183,20 +183,23 @@ Promise.all([
     }
     
     function endDragging(event, d) {
+      alianzasData.forEach(alianza => {
+        if (alianza.partidos.includes(d.data.name)) {
+          let index = alianza.partidos.indexOf(d.data.name);
+          alianza.partidos.splice(index, 1);
+        }
+      });
       if (overCircle === null) {
-        d3.select(this)
-          .transition(100)
-          .attr("transform", d => `translate(${gScale(d.parent.data.name) + rScale(d.x - d.parent.x)},${stdY + rScale(d.y - d.parent.y)})`)
+        alianzasData.push({
+          "nombre": "Pacto " + (alianzas.length + 1),
+          "color": partidosDict[d.data.name].colorStroke,
+          "partidos": [d.data.name],
+          "nombres": ["Nuevo", "Pacto " + (alianzas.length + 1)]
+        })
       } else {
-        alianzas.forEach(alianza => {
-          if (alianza.partidos.includes(d.data.name)) {
-            let index = alianza.partidos.indexOf(d.data.name);
-            alianza.partidos.splice(index, 1);
-          }
-        });
-        alianzas.filter(alianza => alianza.nombre === overCircle.data.name)[0].partidos.push(d.data.name);
-        updatePlot(alianzas);
+        alianzasData.filter(alianza => alianza.nombre === overCircle.data.name)[0].partidos.push(d.data.name);
       }
+      updatePlot(alianzasData);
     }
 
     const outerNodes = svg
