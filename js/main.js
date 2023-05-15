@@ -1,3 +1,67 @@
+const alianzaUnidad = [
+  {
+      "nombre": "Unidad para Chile",
+      "color": "#f43333",
+      "partidos": ["FEDERACION REGIONALISTA VERDE SOCIAL", "PARTIDO COMUNISTA DE CHILE", "REVOLUCION DEMOCRATICA",
+                  "ACCIÓN HUMANISTA", "PARTIDO LIBERAL DE CHILE", "PARTIDO SOCIALISTA DE CHILE", "CONVERGENCIA SOCIAL",
+                  "COMUNES", "PARTIDO POR LA DEMOCRACIA", "PARTIDO RADICAL DE CHILE", "PARTIDO DEMOCRATA CRISTIANO"],
+      "nombres": ["Unidad", "para Chile"]
+  },
+  {
+      "nombre": "Independientes",
+      "color": "#a139bb",
+      "partidos": ["CANDIDATURAS INDEPENDIENTES"],
+      "nombres": ["", "Indep."]
+  },
+  {
+      "nombre": "Partido de la Gente",
+      "color": "#48ab24",
+      "partidos": ["PARTIDO DE LA GENTE"],
+      "nombres": ["Partido de", "la Gente"]
+  },
+  {
+      "nombre": "Chile Seguro",
+      "color": "#2bbaee",
+      "partidos": ["RENOVACION NACIONAL", "UNION DEMOCRATA INDEPENDIENTE", "EVOLUCION POLITICA"],
+      "nombres": ["Chile", "Seguro"]
+  },
+  {
+      "nombre": "Partido Republicano",
+      "color": "#0c228d",
+      "partidos": ["PARTIDO REPUBLICANO DE CHILE"],
+      "nombres": ["Partido", "Republicano"]
+  }
+];
+
+const alianzaSegura = [
+  {
+      "nombre": "Unidad para Chile",
+      "color": "#f43333",
+      "partidos": ["FEDERACION REGIONALISTA VERDE SOCIAL", "PARTIDO COMUNISTA DE CHILE", "REVOLUCION DEMOCRATICA",
+                  "ACCIÓN HUMANISTA", "PARTIDO LIBERAL DE CHILE", "PARTIDO SOCIALISTA DE CHILE", "CONVERGENCIA SOCIAL",
+                  "COMUNES", "PARTIDO POR LA DEMOCRACIA", "PARTIDO RADICAL DE CHILE", "PARTIDO DEMOCRATA CRISTIANO"],
+      "nombres": ["Unidad", "para Chile"]
+  },
+  {
+      "nombre": "Independientes",
+      "color": "#a139bb",
+      "partidos": ["CANDIDATURAS INDEPENDIENTES"],
+      "nombres": ["", "Indep."]
+  },
+  {
+      "nombre": "Partido de la Gente",
+      "color": "#48ab24",
+      "partidos": ["PARTIDO DE LA GENTE"],
+      "nombres": ["Partido de", "la Gente"]
+  },
+  {
+      "nombre": "Chile Seguro",
+      "color": "#2bbaee",
+      "partidos": ["RENOVACION NACIONAL", "UNION DEMOCRATA INDEPENDIENTE", "EVOLUCION POLITICA", "PARTIDO REPUBLICANO DE CHILE"],
+      "nombres": ["Chile", "Seguro"]
+  }
+]
+
 Promise.all([
   d3.csv("data/votos.csv"),
   d3.csv("data/cupos.csv"),
@@ -378,6 +442,8 @@ Promise.all([
 
   }
   updatePlot(alianzas);
-  plotEscanos(alianzas, "viz-1")
+  plotEscanos(alianzas, "escanos-final");
+  plotEscanos(alianzaUnidad, "escanos-unidad");
+  plotEscanos(alianzaSegura, "escanos-seguro");
 
 })
