@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <meta name="author" content="Fernando Becerra">
-	<meta name="description" content="Visualización interactiva de proyectos de ley que han sido ingresados como reformas constitucionales para modificar la Constitución Política de la República de Chile de 1980.">
+	<meta name="description" content="Visualización interactiva de ">
 
 	<meta property="og:url" content="http://www.fernandobecerra.com/reformas">
 	<meta property="og:title" content="Reformas constitucionales">
@@ -100,20 +100,15 @@
     <div class="col-xs-12 col-sm-8 col-md-6 notes">
       <p>
         <h6>Fuentes</h6>
-        El texto está basado en <a href="https://www.elmostrador.cl/noticias/opinion/2011/07/28/como-cambiar-la-constitucion/" target="_blank">este artículo</a> escrito por Fernando Muñoz
-        y en la página de Wikipedia de la <a href="https://es.wikipedia.org/wiki/Constitución_Política_de_la_República_de_Chile_de_1980" target="_blank">Constitución Política de Chile</a>.
-        </br>
-        La información y los detalles de cada proyecto de ley fueron recogidos de la página de la
-        <a href="https://www.bcn.cl/historiadelaley/nc/historia-de-la-ley/modificaciones/2422/aHR0cHM6Ly93d3cuYmNuLmNsL2hpc3RvcmlhZGVsYWxleS9uYy9saXN0YS1kZS1yZXN1bHRhZG8tZGUtYnVzcXVlZGEvY29uc3RpdHVjaW9uLyNwYWdpbmEtMQ%3D%3D/2/50/10/10/" target="_blank">Biblioteca del Congreso Nacional</a>,
-        la página del <a href="https://www.senado.cl/appsenado/templates/tramitacion/index.php" target="_blank">Senado de la República</a>
-        y la <a href="http://opendata.congreso.cl" target="_blank">API del Congreso</a>.
+        Los resultados de las votaciones fueron sacados del <a href="https://www.servelelecciones.cl" target="_blank">portal del Servicio Electoral.</a>
+        Los colores de cada partido fueron elegidos en base a sus logos, mientras que los colores de cada pacto se basaron en la paleta usada por <a href="https://live.decidechile.cl/2023/consejeros" target="_blank">Decide Chile</a>.
       </p>
       <p>
         <h6>Métodos</h6>
-        El <a href="https://github.com/fbecerra/reformas/blob/master/data/grid.xlsx" target="_blank">listado</a> de proyectos de ley ingresados como reformas constitucionales se obtuvo desde la búsqueda avanzada de la página del Senado.
-        Luego se usó el número de boletín de cada proyecto para acceder al detalle a través de la API del Congreso.
-        Los datos finales se encuentran en <a href="https://github.com/fbecerra/reformas/blob/master/data/reformas.json" target="_blank">este archivo</a> que fue generado luego de corregir inconsistencias en los nombres de lso congresistas.
-        Para más detalle se puede ver el <a href="https://github.com/fbecerra/reformas/blob/master/python/reformas_constitucionales.ipynb">jupyter notebook</a> utilizado para procesar los datos.
+        Los pactos electorales fueron definidos en base a su inscripción en el servicio electoral.
+        Los votos obtenidos por partido político en cada región se bajaron desde la <a href="https://www.servelelecciones.cl" target="_blank">página del Servel</a>.
+        Cada vez que un partido político es movido a un nuevo pacto, se calculan los votos totales de cada pacto en cada región como la suma de los votos recibidos por cada partido perteneciente al pacto.
+        Finalmente, se calculan las primeras mayorías por región usando el <a href="https://www.servel.cl/2015/08/18/nuevo-sistema-electoral-chileno-metodo-dhont-2/" target="_blank">sistema D'Hondt</a>, lo que da el número final de escaños ocupados por cada pacto.
       </p>
       <p>
         <h6>Autor</h6>
