@@ -53,10 +53,57 @@ Promise.all([
     .style("font", "10px sans-serif")
     .attr("text-anchor", "middle");
 
-  function updatePlot(alianzasData) {
+  function plotEscanos(alianzasData, div) {
+    const padding = 8,
+      radius = 14,
+      labelHeight = 40;
 
-    const nrows = Math.ceil(alianzasData.length / ncols);
+    const svgWidth = 17 *  (2 * radius) + 18 * padding,
+      svgHeight = 3 * (2 * radius) + 2 * padding + labelHeight;
 
+    const escanosSvg = d3.select(`#${div}`)
+      .append("svg")
+      .attr("width", svgWidth)
+      .attr("height", svgHeight)
+      .attr("viewBox", [0, 0, svgWidth, svgHeight])
+      .style("font", "10px sans-serif")
+      .attr("text-anchor", "middle");
+
+    calculateVotes(alianzasData);
+
+    const escanosData = alianzasData.map(alianza => {
+      return d3.range(alianza.nRepresentantes).map(d => {
+        return {
+          "nombre": alianza.nombre,
+          "nombres": alianza.nombres,
+          "color": alianza.color
+        }
+      }).flat()
+    }).flat();
+
+    const escanos = escanosSvg
+      .selectAll(".escano")
+      .data(escanosData)
+      .join("circle")
+        .attr("class", "escano")
+        .attr("r", radius)
+        .attr("fill", (d) => d.color)
+        // .attr("stroke", d => alianzasDict[d.data.name].color)
+        // .attr("opacity", 0.8)
+        // .attr("stroke-width", 2)
+        .attr("cx", (d,i) => {
+          const col = Math.floor(i / 3);
+          return (2 * col + 1) * radius + col * padding;
+        })
+        .attr("cy", (d,i) => {
+          const row = Math.floor(i % 3);
+          return (2 * row + 1) * radius + row * padding;
+        });
+
+    console.log(escanosData)
+  }
+
+  function calculateVotes(alianzasData) {
     // D'Hondt
     const mostVotes = cupos.map(cupo => {
 
@@ -96,6 +143,13 @@ Promise.all([
         "nombres": alianza.nombres
       }
     });
+  }
+
+  function updatePlot(alianzasData) {
+
+    calculateVotes(alianzasData);
+
+    const nrows = Math.ceil(alianzasData.length / ncols);
 
     const circlesData = {
       "name": "All",
@@ -310,5 +364,6 @@ Promise.all([
 
   }
   updatePlot(alianzas);
+  plotEscanos(alianzas, "viz-1")
 
 })
