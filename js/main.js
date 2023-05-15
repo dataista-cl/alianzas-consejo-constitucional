@@ -179,6 +179,16 @@ Promise.all([
         .style("font-weight", d => d.includes('votos') ? 300 : d.includes('escaño') ? 400 : 500)
         .style("letter-spacing", "-0.5px")
         .text(d => d);
+
+    escanosSvg.selectAll(".untercio")
+        .data([0])
+        .join("path")
+          .attr("class", "untercio")
+          .attr("d", `M ${12 * radius + 5.5 * padding} 0 L ${12 * radius + 5.5 * padding} ${4 * radius + 1.5 * padding} L ${10 * radius + 4.5 * padding} ${4 * radius + 1.5 * padding} L ${10 * radius + 4.5 * padding} ${6 * radius + 2.5 * padding}`)
+          .attr("fill", "none")
+          .attr("stroke", "black")
+          .attr("stroke-width", 1.5)
+          .attr("stroke-dasharray", "4 4")
     }
   };
 
