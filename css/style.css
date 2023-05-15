@@ -12,9 +12,18 @@ body {
 }
 
 .viz-title {
-  font-family: 'David Libre', serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 18px;
   font-weight: 500;
+}
+
+.viz-escanos {
+  margin-top: -10px;
+}
+
+#escanos-final {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
 .viz {

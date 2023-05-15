@@ -122,10 +122,12 @@ Promise.all([
 
     const padding = 8,
       radius = 14,
-      labelHeight = 60;
+      labelHeight = 60,
+      untercioPadding = 20;
+
 
     const svgWidth = 17 *  (2 * radius) + 18 * padding,
-      svgHeight = 3 * (2 * radius) + 2 * padding + labelHeight;
+      svgHeight = 3 * (2 * radius) + 2 * padding + labelHeight + untercioPadding;
 
     const escanosData = alianzasData.map(alianza => {
       return d3.range(alianza.nRepresentantes).map(d => {
@@ -158,17 +160,16 @@ Promise.all([
         .attr("class", "escano")
         .attr("r", radius)
         .attr("fill", (d) => alianzasDict[d.nombre].color)
-        .attr("cx", d => (2 * d.col + 1) * radius + d.col * padding)
-        .attr("cy", d => (2 * d.row + 1) * radius + d.row * padding);
+        .attr("cx", d => (2 * d.col + 1) * radius + d.col * padding + padding / 2)
+        .attr("cy", d => (2 * d.row + 1) * radius + d.row * padding + padding / 2 + untercioPadding);
 
-    if (addLabels === true) {
-      const escanosLabels = escanosSvg
+    const escanosLabels = escanosSvg
       .selectAll(".escano-labels")
       .data(escanosData.filter(d => d.index === 0))
       .join("g")
         .attr("class", "escano-labels")
         .attr("fill", d => alianzasDict[d.nombre].color)
-        .attr("transform", d => `translate(${2 * d.col * radius + d.col * padding},${3 * (2 * radius) + 2 * padding+ 20})`)
+        .attr("transform", d => `translate(${2 * d.col * radius + d.col * padding + padding / 2},${3 * (2 * radius) + 2 * padding+ 20 + padding + untercioPadding})`)
     
     escanosLabels.selectAll("text")
       .data(d => [...alianzasDict[d.nombre].nombres,
@@ -180,15 +181,34 @@ Promise.all([
         .style("letter-spacing", "-0.5px")
         .text(d => d);
 
+    const labelColor = "#777";
+
     escanosSvg.selectAll(".untercio")
         .data([0])
         .join("path")
           .attr("class", "untercio")
-          .attr("d", `M ${12 * radius + 5.5 * padding} 0 L ${12 * radius + 5.5 * padding} ${4 * radius + 1.5 * padding} L ${10 * radius + 4.5 * padding} ${4 * radius + 1.5 * padding} L ${10 * radius + 4.5 * padding} ${6 * radius + 2.5 * padding}`)
+          .attr("d", `M 1 ${1 + untercioPadding}
+                    L ${12 * radius + 6 * padding} ${1 + untercioPadding}
+                    L ${12 * radius + 6 * padding} ${4 * radius + 2 * padding + untercioPadding}
+                    L ${10 * radius + 5 * padding} ${4 * radius + 2 * padding + untercioPadding}
+                    L ${10 * radius + 5 * padding} ${6 * radius + 3 * padding + untercioPadding}
+                    L 1 ${6 * radius + 3 * padding + untercioPadding}
+                    L 1 ${1 + untercioPadding}`)
           .attr("fill", "none")
-          .attr("stroke", "black")
-          .attr("stroke-width", 1.5)
-          .attr("stroke-dasharray", "4 4")
+          .style("stroke", labelColor)
+          .style("stroke-width", 1.5)
+          .style("stroke-location", "inside");
+
+    if (addLabels === true) {
+      escanosSvg.selectAll(".untercio-label")
+          .data(["1/3 de escaños"])
+          .join("text")
+            .attr("class", "untercio-label")
+            .style("text-anchor", "end")
+            .attr("x", (12 * radius + 6 * padding))
+            .attr("y", untercioPadding - 2)
+            .attr("fill", labelColor)
+            .text(d => d);
     }
   };
 
@@ -452,8 +472,8 @@ Promise.all([
 
   }
   updatePlot(alianzas);
-  plotEscanos(alianzas, "escanos-final");
-  plotEscanos(alianzaUnidad, "escanos-unidad");
-  plotEscanos(alianzaSegura, "escanos-seguro");
+  plotEscanos(alianzas, "escanos-final", addLabels=true);
+  plotEscanos(alianzaUnidad, "escanos-unidad", addLabels=false);
+  plotEscanos(alianzaSegura, "escanos-seguro", addLabels=false);
 
 })
