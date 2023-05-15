@@ -56,7 +56,7 @@ Promise.all([
   function plotEscanos(alianzasData, div) {
     const padding = 8,
       radius = 14,
-      labelHeight = 40;
+      labelHeight = 60;
 
     const svgWidth = 17 *  (2 * radius) + 18 * padding,
       svgHeight = 3 * (2 * radius) + 2 * padding + labelHeight;
@@ -75,11 +75,15 @@ Promise.all([
       return d3.range(alianza.nRepresentantes).map(d => {
         return {
           "nombre": alianza.nombre,
-          "nombres": alianza.nombres,
-          "color": alianza.color
+          "index": d
         }
       }).flat()
     }).flat();
+
+    escanosData.forEach((escano, i) => {
+      escano.col = Math.floor(i / 3);
+      escano.row = Math.floor(i % 3);
+    })
 
     const escanos = escanosSvg
       .selectAll(".escano")
@@ -87,20 +91,28 @@ Promise.all([
       .join("circle")
         .attr("class", "escano")
         .attr("r", radius)
-        .attr("fill", (d) => d.color)
-        // .attr("stroke", d => alianzasDict[d.data.name].color)
-        // .attr("opacity", 0.8)
-        // .attr("stroke-width", 2)
-        .attr("cx", (d,i) => {
-          const col = Math.floor(i / 3);
-          return (2 * col + 1) * radius + col * padding;
-        })
-        .attr("cy", (d,i) => {
-          const row = Math.floor(i % 3);
-          return (2 * row + 1) * radius + row * padding;
-        });
+        .attr("fill", (d) => alianzasDict[d.nombre].color)
+        .attr("cx", d => (2 * d.col + 1) * radius + d.col * padding)
+        .attr("cy", d => (2 * d.row + 1) * radius + d.row * padding);
 
-    console.log(escanosData)
+    const escanosLabels = escanosSvg
+      .selectAll(".escano-labels")
+      .data(escanosData.filter(d => d.index === 0))
+      .join("g")
+        .attr("class", "escano-labels")
+        .style("text-anchor", "initial")
+        .attr("fill", d => alianzasDict[d.nombre].color)
+        .attr("transform", d => `translate(${2 * d.col * radius + d.col * padding},${3 * (2 * radius) + 2 * padding+ 20})`)
+    
+    escanosLabels.selectAll("text")
+      .data(d => [...alianzasDict[d.nombre].nombres,
+        alianzasDict[d.nombre].nRepresentantes === 1 ? alianzasDict[d.nombre].nRepresentantes + " escaño" : alianzasDict[d.nombre].nRepresentantes + " escaños"])
+      .join("text")
+        .attr("dy", (d,i) => i * 16)
+        .style("font-size", (d,i) => i <= 1 ? 16 : 14)
+        .style("font-weight", d => d.includes('votos') ? 300 : d.includes('escaño') ? 400 : 500)
+        .style("letter-spacing", "-0.5px")
+        .text(d => d);
   }
 
   function calculateVotes(alianzasData) {
