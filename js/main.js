@@ -341,7 +341,7 @@ Promise.all([
       .on("end", endDragging);
 
     function dragCircle(event, d) {
-      const [x, y] = d3.pointer(event, svg.node());
+      const [x, y] = event.identifier === "mouse" ? d3.pointer(event, svg.node()) : d3.pointer(event.sourceEvent.touches[0], svg.node());
       d3.select(this)
         .attr("transform", `translate(${x},${y})`);
       overCircle = overDragCircles(x, y);
