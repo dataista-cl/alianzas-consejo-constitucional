@@ -60,7 +60,9 @@ const alianzaSegura = [
       "partidos": ["RENOVACION NACIONAL", "UNION DEMOCRATA INDEPENDIENTE", "EVOLUCION POLITICA", "PARTIDO REPUBLICANO DE CHILE"],
       "nombres": ["Chile", "Seguro"]
   }
-]
+];
+
+const windowWidth = window.innerWidth;
 
 Promise.all([
   d3.csv("data/votos.csv"),
@@ -102,12 +104,15 @@ Promise.all([
     cupo.cupos = +cupo.cupos;
   })
 
-  const width = 1000,
+  const width = windowWidth < 500 ? 400 : windowWidth < 600 ? 500 : windowWidth < 800 ? 600 : windowWidth < 1000 ? 800 :  1000,
     height = 400;
+
+  const bigFont = windowWidth < 700 ? 14 : 16,
+    smallFont = windowWidth < 700 ? 12 : 14;
 
   const margin = {"top": 80, "bottom": 20};
 
-  const ncols = 6;
+  const ncols = windowWidth < 500 ? 2 : windowWidth < 600 ? 3 : windowWidth < 1000 ? 4 : 6;
 
   const svg = d3.select("#viz")
     .append("svg")
@@ -120,11 +125,10 @@ Promise.all([
   function plotEscanos(alianzasData, div, addLabels=true) {
     calculateVotes(alianzasData);
 
-    const padding = 8,
-      radius = 14,
+    const padding = windowWidth < 700 ? 4 : windowWidth < 1280 ?  6 : 8,
+      radius = windowWidth < 460 ? 8 : windowWidth < 700 ? 9 : windowWidth < 1280 ?  10 : 14,
       labelHeight = 60,
       untercioPadding = 20;
-
 
     const svgWidth = 17 *  (2 * radius) + 18 * padding,
       svgHeight = 3 * (2 * radius) + 2 * padding + labelHeight + untercioPadding;
@@ -176,7 +180,7 @@ Promise.all([
         alianzasDict[d.nombre].nRepresentantes === 1 ? alianzasDict[d.nombre].nRepresentantes + " escaño" : alianzasDict[d.nombre].nRepresentantes + " escaños"])
       .join("text")
         .attr("dy", (d,i) => i * 16)
-        .style("font-size", (d,i) => i <= 1 ? 16 : 14)
+        .style("font-size", (d,i) => i <= 1 ? bigFont : smallFont)
         .style("font-weight", d => d.includes('votos') ? 300 : d.includes('escaño') ? 400 : 500)
         .style("letter-spacing", "-0.5px")
         .text(d => d);
@@ -196,7 +200,7 @@ Promise.all([
                     L 1 ${1 + untercioPadding}`)
           .attr("fill", "none")
           .style("stroke", labelColor)
-          .style("stroke-width", 1.5)
+          .style("stroke-width", windowWidth < 700 ? 1.0 : 1.5)
           .style("stroke-location", "inside");
 
     if (addLabels === true) {
@@ -299,7 +303,8 @@ Promise.all([
 
     const widthPadding = maxRadius * 0.6;
 
-    const widthBand = d3.sum(mainnodes, (d) => d.r * 2 + widthPadding);
+    // const widthBand = d3.sum(mainnodes, (d) => d.r * 2 + widthPadding);
+    const widthBand = windowWidth < 600 ? windowWidth : d3.sum(mainnodes, (d) => d.r * 2 + widthPadding);
 
     const rScale = d3.scaleLinear().domain([0, widthBand]).range([0, width]);
 
@@ -465,7 +470,7 @@ Promise.all([
         d3.format(".3s")(alianzasDict[d.data.name].votosTotales) + ' votos'])
       .join("text")
         .attr("dy", (d,i) => i * 16)
-        .style("font-size", (d,i) => i <= 1 ? 16 : 14)
+        .style("font-size", (d,i) => i <= 1 ? bigFont : smallFont)
         .style("font-weight", d => d.includes('votos') ? 300 : d.includes('escaño') ? 400 : 500)
         .style("letter-spacing", "-0.5px")
         .text(d => d);
