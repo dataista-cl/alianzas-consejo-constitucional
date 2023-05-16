@@ -11,6 +11,12 @@ body {
   padding-bottom: 30px;
 }
 
+.viz-wrapper {
+  display: block;
+  margin: 40px auto;
+  max-width: fit-content;
+}
+
 .viz-title {
   font-family: 'Open Sans', sans-serif;
   font-size: 18px;
