@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Reformas constitucionales</title>
+  <title>Como hubiese quedado el consejo constitucional con otros pactos</title>
   <meta charset="utf-8">
   <meta name="keywords" content="d3.js, visualization, interactive, politics, constitution, Chile">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <meta name="author" content="Fernando Becerra">
-	<meta name="description" content="Visualización interactiva de ">
+	<meta name="description" content="Visualización interactiva que explora las distintas formas en que se hubiesen repartido los escaños del consejo constitucional dependiendo de los pactos suscritos por los partidos políticos participantes del proceso de escritura de una nueva constitución para Chile.">
 
-	<meta property="og:url" content="http://www.fernandobecerra.com/reformas">
-	<meta property="og:title" content="Reformas constitucionales">
-	<meta property="og:description" content="Visualización interactiva de proyectos de ley que han sido ingresados como reformas constitucionales para modificar la Constitución Política de la República de Chile de 1980.">
+	<meta property="og:url" content="https://www.dataista.cl/alianzas-consejo-constitucional">
+	<meta property="og:title" content="Como hubiese quedado el consejo constitucional con otros pactos">
+	<meta property="og:description" content="Visualización interactiva que explora las distintas formas en que se hubiesen repartido los escaños del consejo constitucional dependiendo de los pactos suscritos por los partidos políticos participantes del proceso de escritura de una nueva constitución para Chile.">
 	<meta property="og:image" content="http://www.fernandobecerra.com/reformas/img/social.png">
 	<meta property="og:site_name" content="Fernando Becerra">
 
 	<meta property="twitter:creator" content="@fdo_becerra">
-	<meta property="twitter:title" content="Reformas constitucionales">
-	<meta property="twitter:description" content="Visualización interactiva de proyectos de ley que han sido ingresados como reformas constitucionales para modificar la Constitución Política de la República de Chile de 1980.">
+	<meta property="twitter:title" content="Como hubiese quedado el consejo constitucional con otros pactos">
+	<meta property="twitter:description" content="Visualización interactiva que explora las distintas formas en que se hubiesen repartido los escaños del consejo constitucional dependiendo de los pactos suscritos por los partidos políticos participantes del proceso de escritura de una nueva constitución para Chile.">
 	<meta property="twitter:card" content="summary_large_image">
 	<meta property="twitter:image" content="http://www.fernandobecerra.com/reformas/img/social.png">
 	<meta property="twitter:site" content="@fdo_becerra">
 
   <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@500&family=Open+Sans:wght@300;400;500;600;700&family=Lato:wght@300;700&family=Roboto+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.js"></script>
   <link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
@@ -33,7 +32,7 @@
     <div class="col-sm-2 col-md-3">
     </div>
     <div class="col-xs-12 col-sm-8 col-md-6 title">
-        <h2>Proyectos de reforma a la Constitución de Chile</h2>
+        <h2>¿Y si la izquierda hubiese ido en un pacto único?</h2>
     </div>
     <div class="col-sm-2 col-md-3">
     </div>
@@ -42,15 +41,6 @@
     <div class="col-sm-2 col-md-3">
     </div>
     <div class="col-xs-12 col-sm-8 col-md-6 main-text">
-      <div class="row">
-        <p>
-          El 25 de octubre se llevará a cabo el plebiscito nacional para decidir si queremos escrbir una nueva constitución y bajo qué mecanismo.
-          En este contexto ha surgido la discusión de qué tanto se ha modificado la actual constitución, pues los procedimientos para hacerlo existen y están especifidados en la misma carta magna.
-          Para ello, el Presidente, la Presidenta o cualquier parlamentario o parlamentaria puede presentar un proyecto de reforma, el cual debe ser aprobado por ambas cámaras.
-          En general se necesita de al menos tres quintas partes de los diputados y diputadas, y de senadores y senadoras para aprobarlos, aunque algunos capítulos de la constitución exigen un quórum más alto de dos tercios.
-          Dado eso, ¿cuántas veces se ha hecho uso de este procedimiento?
-        </p>
-      </div>
       <div class="row viz">
         <div class="viz-title">Resultados de la votación</div>
         <div class="viz-escanos" id="escanos-final"></div>
@@ -59,11 +49,13 @@
       </div>
       <div class="row">
         <p>
-          El 25 de octubre se llevará a cabo el plebiscito nacional para decidir si queremos escrbir una nueva constitución y bajo qué mecanismo.
-          En este contexto ha surgido la discusión de qué tanto se ha modificado la actual constitución, pues los procedimientos para hacerlo existen y están especifidados en la misma carta magna.
-          Para ello, el Presidente, la Presidenta o cualquier parlamentario o parlamentaria puede presentar un proyecto de reforma, el cual debe ser aprobado por ambas cámaras.
-          En general se necesita de al menos tres quintas partes de los diputados y diputadas, y de senadores y senadoras para aprobarlos, aunque algunos capítulos de la constitución exigen un quórum más alto de dos tercios.
-          Dado eso, ¿cuántas veces se ha hecho uso de este procedimiento?
+          El dominio de la derecha fue claro en los resultados de la votación del pasado domingo 7 de mayo para elegir representantes para el Consejo Constitucional.
+          El Partido Republicano se convirtió en el partido más votado con un total de 3,47 millones de votos, logrando 23 de los 50 escaños disponibles. 
+          Junto a los 11 escaños logrados por el pacto <i>Chile Seguro</i>, la derecha aseguró más de dos tercios del total de cupos, dejando a la izquierda sin poder de veto. 
+        </p>
+        <p>
+          Si los partidos de <i>Todo por Chile</i>, quienes no lograron asegurar ningún cupo en el Consejo Constitucional, hubiesen ido en la lista de <i>Unidad para Chile</i>, le hubieran quitado dos asientos a <i>Chile Seguro</i> y dos al <i>Partido Republicano</i>, totalizando 20 escaños.
+          Con este resultado, un pacto único entre la izquierda y la centro-izquierda hubiese alcanzado al menos un tercio de los cupos disponibles, dándoles más poder de negociación con la derecha.
         </p>
       </div>
       <div class="row viz">
@@ -72,11 +64,15 @@
       </div>
       <div class="row">
         <p>
-          El 25 de octubre se llevará a cabo el plebiscito nacional para decidir si queremos escrbir una nueva constitución y bajo qué mecanismo.
-          En este contexto ha surgido la discusión de qué tanto se ha modificado la actual constitución, pues los procedimientos para hacerlo existen y están especifidados en la misma carta magna.
-          Para ello, el Presidente, la Presidenta o cualquier parlamentario o parlamentaria puede presentar un proyecto de reforma, el cual debe ser aprobado por ambas cámaras.
-          En general se necesita de al menos tres quintas partes de los diputados y diputadas, y de senadores y senadoras para aprobarlos, aunque algunos capítulos de la constitución exigen un quórum más alto de dos tercios.
-          Dado eso, ¿cuántas veces se ha hecho uso de este procedimiento?
+          Si la izquierda hubiese ido unida en una sola coalición, intuitivamente uno pensaría que la derecha podría haber hecho lo mismo.
+          Pero incluso en ese caso la izquierda hubiese logrado dos escaños más, logrando pasar el umbral del tercio de cupos que le permitían contrarrestar un poco la mayoría lograda por la derecha.
+          En ambos casos, con los republicanos dentro o fuera de <i>Chile Seguro</i>, la ventaja de la izquierda al ir en un pacto único hubiese sido alcanzar el poder de veto.
+        </p>
+        <p>
+          Estas son sólo algunas de las alternativas de pactos que se pudieran haber formado de cara a las elecciones.
+          En realidad, las variantes van mucho más: por ejemplo, uno podría pensar que el Partido de la Gente se podría haber sumado a los partidos de derecha.
+          O uno se podría imaginar el caso en que las elecciones se hubiesen realizado sin pactos y que cada partido hubiese ido independientemente.
+          A continuación se deja una herramienta para explorar cómo hubiese cambiado la composición del Consejo Constitucional dependiendo de los pactos formados, en base a la votación que cada partido recibió en cada región del país.
         </p>
       </div>
     </div>
@@ -87,6 +83,7 @@
     <div class="col-sm-2 col-md-3">
     </div>
     <div class="col-xs-12 col-sm-8 col-md-6">
+      <div class="viz-instructions">Mueva el círculo de un partido para cambiarlo de pacto</div>
       <div id="viz-3"></div>
     </div>
     <div class="col-sm-2 col-md-3">

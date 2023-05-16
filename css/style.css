@@ -90,6 +90,11 @@ input {
   text-align: center;
 }
 
+.viz-instructions {
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
 .inner-circle, .inner-circle-label {
   cursor: pointer;
 }
